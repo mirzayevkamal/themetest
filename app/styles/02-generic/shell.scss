@@ -1,0 +1,56 @@
+/* Root shell rules, shared by app.css and the inlined critical sheets. */
+
+/* RTL-specific font */
+[dir="rtl"] {
+  --font-main: var(--font-ar);
+}
+
+/* Apply fonts from Salla SDK if available */
+body {
+  font-family: var(--font-main);
+  /* Mobile / native-app shell: the app-inner is capped at phone width, so
+     wider screens show this muted ground around it. Web desktop overrides
+     this in desktop.scss. */
+  background-color: #eef0f2;
+}
+
+/* App shell: only #main-content scrolls. Lock the document so a touch on the
+   pinned header/footer can't pan or rubber-band the page itself. */
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+/* Prevent layout shift when modal/drawer opens — scrollbar stays visible */
+body.menu-opened {
+  overflow: hidden;
+  scrollbar-gutter: stable;
+}
+
+/* Native status-bar / home-indicator insets, written by the engine. */
+.app-inner {
+  padding-top: var(--app-safe-area-top, 0px);
+  padding-bottom: var(--app-safe-area-bottom, 0px);
+}
+
+/* Only #main-content scrolls; `none` kills the native rubber-band/PTR so
+   PullToRefresh owns the downward pan at scrollTop 0. */
+#main-content {
+  overscroll-behavior-y: none;
+}
+
+/* Native-app chrome: keep overflow scrolling, never paint a scrollbar.
+   Twilight sets `.mobile-webview` on the document inside the native shell.
+   The web storefront keeps scrollbars so overflow stays visible. */
+.mobile-webview,
+.mobile-webview * {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.mobile-webview::-webkit-scrollbar,
+.mobile-webview *::-webkit-scrollbar {
+  display: none;
+}

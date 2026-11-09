@@ -1,0 +1,64 @@
+// Account pages (Figma 3208:30681): sidebar beside the cards on web desktop,
+// stacked cards under the phone header everywhere else.
+.account-sidebar {
+  display: none;
+}
+
+@include web-desktop {
+  #main-content:has(.account-shell) {
+    @apply bg-smoke;
+  }
+
+  // The engine's account layout caps its column at max-w-3xl; the pages use the full width.
+  .main-content:has(> .account-shell) {
+    max-width: none;
+  }
+
+  // The phone bar and the rows the sidebar already covers.
+  .account-shell:not(.account-shell--page) .mobile-sticky-bar,
+  .account-shell .desktop-hidden {
+    display: none;
+  }
+
+  // A page that keeps its own phone layout (order details) sits beside the sidebar.
+  .account-shell--page {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 24px;
+
+    > :not(.account-sidebar) {
+      flex: 1 1 320px;
+      min-width: 0;
+    }
+  }
+
+  // Narrow desktop windows drop the cards under the sidebar instead of crushing them.
+  .account-shell__body {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 0;
+  }
+
+  .account-shell__main {
+    flex-basis: 320px;
+    gap: 16px;
+  }
+
+  .account-sidebar {
+    display: flex;
+    width: 365px;
+  }
+
+  .account-shell__main > section,
+  .order-card {
+    padding: 24px;
+  }
+
+  // Figma's 88px side margins assumed a narrower column; cap the button instead.
+  .orders-empty__cta {
+    @apply mx-auto w-full max-w-sm;
+  }
+}

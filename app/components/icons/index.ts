@@ -1,0 +1,49 @@
+// All theme icons live here. They are Figma slices, not Salla font glyphs
+// (sicon-*): the font is outline-style and these are filled, so swapping
+// them changes the design.
+// One module per icon so each lands in the chunk that uses it.
+export { FlashIcon } from './FlashIcon';
+export { PercentBadgeIcon } from './PercentBadgeIcon';
+export { DockBasketIcon } from './DockBasketIcon';
+export { UserIcon } from './UserIcon';
+export { OrdersIcon } from './OrdersIcon';
+export { HomeIcon } from './HomeIcon';
+export { BasketIcon } from './BasketIcon';
+export { CloseIcon } from './CloseIcon';
+export { BasketFillIcon } from './BasketFillIcon';
+export { PinIcon } from './PinIcon';
+export { ChevronDownIcon } from './ChevronDownIcon';
+export { BackIcon } from './BackIcon';
+export { ChevronIcon } from './ChevronIcon';
+export { PlusIcon } from './PlusIcon';
+export { MinusIcon } from './MinusIcon';
+export { TrashIcon } from './TrashIcon';
+export { WalletAddIcon } from './WalletAddIcon';
+export { WalletRemoveIcon } from './WalletRemoveIcon';
+export { MapPinIcon } from './MapPinIcon';
+export { UserOutlineIcon } from './UserOutlineIcon';
+export { CreditCardIcon } from './CreditCardIcon';
+export { LanguageIcon } from './LanguageIcon';
+export { CallIcon } from './CallIcon';
+export { PagesIcon } from './PagesIcon';
+export { ShareIcon } from './ShareIcon';
+export { StarIcon } from './StarIcon';
+export { LogoutIcon } from './LogoutIcon';
+export { MegaphoneIcon } from './MegaphoneIcon';
+export { WalletEmptyBadgeIcon } from './WalletEmptyBadgeIcon';
+export { TimeIcon } from './TimeIcon';
+export { CalendarIcon } from './CalendarIcon';
+export { TaskDoneIcon } from './TaskDoneIcon';
+export { OrderBasketIcon } from './OrderBasketIcon';
+export { CheckBadgeIcon } from './CheckBadgeIcon';
+export { MapPinFillIcon } from './MapPinFillIcon';
+export { SupportIcon } from './SupportIcon';
+export { ApplePayLogo } from './ApplePayLogo';
+export { TrackCheckIcon } from './TrackCheckIcon';
+export { TrackBasketIcon } from './TrackBasketIcon';
+export { TrackCarIcon } from './TrackCarIcon';
+export { TrackPinIcon } from './TrackPinIcon';
+export { PhoneIcon } from './PhoneIcon';
+export { WhatsappIcon } from './WhatsappIcon';
+export { CancelBadgeIcon } from './CancelBadgeIcon';
+export { SearchIcon } from './SearchIcon';

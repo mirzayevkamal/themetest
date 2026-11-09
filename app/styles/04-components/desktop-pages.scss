@@ -1,0 +1,257 @@
+// Web-desktop rules for pages other than home and product. Kept out of desktop.scss
+// so the inlined critical sheets stay small; app.scss imports this right after it.
+
+// Wide phones and small tablets (481–767px) keep the phone page layout but fill
+// the row with 114px+ columns instead of three stretched ones (see slider.scss).
+// Not gated on the webview: a tablet inside the app needs the same.
+@media (min-width: 481px) {
+  .category-products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(114px, 1fr));
+  }
+}
+
+@include web-desktop {
+  // The desktop header already shows the address picker; a cart title bar would repeat it.
+  .cart-page-header {
+    display: none;
+  }
+
+  // Cart page: two columns on the smoke page background, like Raed's cart.
+  #main-content:has(.cart-desktop) {
+    @apply bg-smoke;
+  }
+
+  .cart-desktop {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  // Same crumb treatment as the product page (product.scss).
+  .cart-desktop__crumbs {
+    padding: 0;
+    color: #333;
+    font-size: 12px;
+    line-height: normal;
+
+    .s-breadcrumb-wrapper {
+      gap: 8px;
+    }
+
+    .s-breadcrumb-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .s-breadcrumb-item[aria-current='page'] {
+      color: theme('colors.silver.light');
+    }
+
+    .s-breadcrumb-arrow {
+      margin-inline: 0;
+
+      svg {
+        width: 12px;
+        height: 12px;
+        fill: currentColor;
+      }
+    }
+  }
+
+  // Before hydration: the sticky header is 80px, and one header menu row adds 32px.
+  // DesktopHeader then sets the measured height inline, so a wrapped menu is covered too.
+  body {
+    --desktop-header-h: 80px;
+  }
+
+  body:has(.desktop-header__menu) {
+    --desktop-header-h: 112px;
+  }
+
+  // The sticky summary clears the sticky header with a 16px gap.
+  .cart-desktop__summary {
+    top: calc(var(--desktop-header-h) + 16px);
+  }
+
+  body:has(.desktop-header--static) .cart-desktop__summary {
+    top: 24px;
+  }
+
+  // Under 1200px the page gutter leaves the item rows too little room beside a
+  // 384px summary, so the summary drops under the items at full width.
+  @media (max-width: 1199px) {
+    .cart-desktop__body {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .cart-desktop__summary {
+      position: static;
+      width: 100%;
+    }
+  }
+
+  // The title, search field, or cart address stays. It is no longer a sticky bar.
+  .mobile-sticky-bar {
+    position: static;
+    z-index: auto;
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+    padding-inline: 0;
+
+    h1 {
+      text-align: start;
+    }
+  }
+
+  // Category tabs and chips pin under the sticky desktop header.
+  // Only on the page: the banner sheet has its own close bar, not that header.
+  .category-page > .category-toolbar {
+    top: var(--desktop-header-h);
+    background-color: #fff;
+  }
+
+  // Chip jumps land below header + toolbar (117px) with a 16px gap. `~`, not `+`: the
+  // merchant block hooks sit between the toolbar and the sections.
+  .category-page > .category-toolbar ~ .container > * {
+    scroll-margin-top: calc(var(--desktop-header-h) + 133px);
+  }
+
+  // `header_is_sticky` off: the header scrolls away, so the toolbar pins at the top.
+  body:has(.desktop-header--static) {
+    .category-page > .category-toolbar {
+      top: 0;
+    }
+
+    .category-page > .category-toolbar ~ .container > * {
+      scroll-margin-top: 133px;
+    }
+  }
+
+  // Figma 3203:19701 — the category and sub-category rows use flat 40px arrows
+  // (12px radius) centered on each row. Rows are 8px-rounded with 16px inner
+  // padding; the tab row is 51px tall with the underline just above its border,
+  // and the chip row is 66px with 42px chips.
+  .category-toolbar {
+    .scroll-strip {
+      border-radius: 8px;
+    }
+
+    .container {
+      padding-inline: 16px;
+    }
+
+    nav a {
+      padding-block: 12px 11px;
+      line-height: 26px;
+    }
+
+    .container button {
+      padding: 7px;
+      line-height: 26px;
+    }
+
+    // The sort and filter controls sit before the start arrow, which hangs 28px off the row.
+    .scroll-strip-start {
+      padding-inline-end: 36px;
+    }
+
+    .s-slider-nav-arrow {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      box-shadow: none;
+
+      // Hide the arrow at the end the row has reached. Visibility, not display:
+      // the nav is space-between, so a removed arrow would shift its sibling.
+      &.swiper-button-disabled {
+        visibility: hidden;
+      }
+    }
+  }
+
+  // 127px cards, at least 42px apart (7 per 1144px row), spread to fill the row.
+  // The products page (latest, sales, offers) and search use the engine list, so they
+  // get the same grid instead of the engine's four wide columns.
+  .category-products-grid,
+  .products-page .s-products-list-wrapper {
+    grid-template-columns: repeat(auto-fill, 127px);
+    justify-content: space-between;
+    gap: 16px 42px;
+  }
+
+  // An empty or short search keeps the footer below the fold.
+  .search-page {
+    min-height: 100vh;
+  }
+
+  // ItemsList keeps the grid classes on its empty state; `space-between` would
+  // pin the lone placeholder to the start of the row.
+  .category-products-grid.s-items-list-empty,
+  .products-page .s-products-list-wrapper.s-items-list-empty {
+    justify-content: center;
+  }
+
+  // Twilight keeps every salla-modal as a bottom sheet because sm/md are
+  // parked at 30000px. Center the dialog in the viewport on web desktop.
+  .s-modal-wrapper {
+    display: flex;
+    align-items: safe center;
+    justify-content: safe center;
+  }
+
+  .s-modal-spacer {
+    display: none;
+  }
+
+  .s-modal-body {
+    position: relative;
+    inset: auto;
+    width: min(480px, calc(100vw - 2rem));
+    max-height: calc(100vh - 2rem);
+    margin: 0;
+    overflow: auto;
+    border-radius: 0.25rem;
+    transform: none;
+  }
+
+  .s-modal-body.s-modal-xs {
+    width: min(380px, calc(100vw - 2rem));
+  }
+
+  .s-modal-body.s-modal-md {
+    width: min(768px, calc(100vw - 2rem));
+  }
+
+  .s-modal-body.s-modal-lg {
+    width: min(992px, calc(100vw - 2rem));
+  }
+
+  .s-modal-body.s-modal-xl {
+    width: min(1280px, calc(100vw - 2rem));
+  }
+
+  .s-modal-body.s-modal-full {
+    width: calc(100vw - 2rem);
+    height: calc(100vh - 2rem);
+    max-height: calc(100vh - 2rem);
+  }
+
+  .s-modal-body.s-modal-auto {
+    width: fit-content;
+    max-width: 90vw;
+  }
+
+  .s-search-modal .s-modal-body {
+    width: min(700px, 90vw);
+    margin-top: 0;
+  }
+}
+
+@include web-tablet {
+  .search-page-header {
+    display: flex;
+  }
+}

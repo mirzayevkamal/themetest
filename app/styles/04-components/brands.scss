@@ -1,0 +1,113 @@
+.brands-nav {
+  @apply flex flex-wrap justify-center rtl:space-x-reverse space-x-2 space-y-2;
+
+  &__item {
+    @apply flex items-center justify-center rounded-md hover:shadow-sm focus:border-primary text-sm w-10 h-10 bg-white text-gray-500 p-1 transition;
+
+    &.is-selected{
+      @apply bg-primary text-primary-reverse #{!important};
+    }
+
+    span{
+      @apply pointer-events-none;
+    }
+  }
+
+  &.is-sticky{
+    @apply flex-col flex-wrap h-full fixed z-0 top-9 rtl:right-2 ltr:left-2 space-y-0.5 pt-16 pb-10;
+
+    .brands-nav__item{
+      @apply bg-white;
+
+      @media (max-width: 1280px) {
+        @apply w-6 h-6;
+      }
+    }
+  }
+}
+
+.brand-char {
+  @apply rtl:ml-5 ltr:mr-5 rtl:md:ml-12 ltr:md:mr-12 bg-white rounded-md w-10 h-10 flex items-center transition justify-center hover:shadow-sm border border-transparent focus:border-primary text-sm;
+}
+
+.brand-item {
+  @apply flex justify-center items-center bg-white transition hover:opacity-95 bg-cover h-20 sm:h-24 md:h-32 text-white text-center p-3 sm:p-4 md:p-8 rounded-md overflow-hidden relative;
+
+  img {
+    @apply object-contain;
+  }
+
+  .index & {
+    @apply p-4;
+
+    img{
+      @apply xs:max-w-[150px] w-auto;
+    }
+  }
+}
+
+@include web-desktop {
+  .brand-item {
+    @apply h-32;
+  }
+}
+
+.s-block--brands {
+  @apply bg-white pt-0 pb-0 sm:pt-0 sm:pb-0;
+}
+
+.brands-home {
+  @apply px-4 sm:px-2.5;
+
+  &__title {
+    @apply mb-3;
+
+    h2 {
+      @apply text-[20px] font-bold leading-normal text-ink;
+    }
+  }
+
+  // Figma: 16px title-to-logos (12px title margin + pt-1). pb-4 is room for the
+  // desktop hover lift and shadow inside the scroller; -mb-4 keeps it out of layout.
+  &__list {
+    @apply flex gap-2 overflow-x-auto pt-1 pb-4 -mb-4;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__link {
+    @apply shrink-0;
+  }
+
+  &__item {
+    @apply relative block h-20 w-20 overflow-hidden rounded-[24px] border border-hairline bg-white;
+  }
+
+  &__logo {
+    @apply block h-full w-full max-w-none;
+  }
+}
+
+@include web-desktop {
+  .brands-home {
+    &__list {
+      @apply gap-6;
+    }
+
+    // Same 114px tile and 24px gap as the category grid.
+    &__item {
+      @apply transition duration-200;
+      width: 114px;
+      height: 114px;
+    }
+
+    // A second `&` would repeat the mixin's `html:not(...)` prefix and never match.
+    &__link:hover .brands-home__item,
+    &__link:focus-visible .brands-home__item {
+      @apply -translate-y-1 shadow-md;
+    }
+  }
+}

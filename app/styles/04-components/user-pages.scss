@@ -1,0 +1,241 @@
+.single-order-header-item{
+  @media (max-width: 768px) {
+    @apply flex justify-between items-center;
+  }
+}
+
+.order-file {
+  .s-button-text {
+    @apply flex gap-2
+  }
+}
+
+/* tags */
+.tag {
+  @apply px-3 pt-0.5 pb-1 inline-block text-sm rounded-2xl border border-gray-200;
+
+  &--primary {
+    @apply text-primary border-primary;
+  }
+}
+
+/* Profile Header section */
+.profile-header {
+  @apply relative lg:h-48 overflow-hidden;
+
+  .breadcrumbs {
+    @screen lg {
+      @apply mt-2.5;
+    }
+
+    a {
+      @apply text-primary-reverse hover:opacity-80;
+    }
+
+    span {
+      @apply text-primary-reverse opacity-80;
+    }
+
+    .arrow {
+      @apply text-primary-reverse opacity-70;
+    }
+  }
+}
+
+.s-file-upload-profile-image .s-file-upload-has-error .filepond--file-status{
+  @apply ltr:-left-1/2 rtl:right-1/2;
+}
+
+
+.rating-header {
+  @apply relative from-primary to-primary-d p-5 text-primary-reverse rounded-md;
+}
+
+/* Profile additional fields */
+.form--user-profile{
+  .s-file-upload-wrapper{
+    min-height: 120px;
+    .filepond--list-scroller{
+      overflow-y: inherit !important;
+    }
+    .filepond--drop-label {
+      min-height: 120px !important;
+      @apply bg-white cursor-pointer border-dashed rounded-md border border-gray-200;
+    }
+    .profile-filepond-placholder{
+      @apply flex flex-col justify-center items-center;
+      &-icon {
+        @apply mb-1;
+        i {
+          color: #7c8082;
+          @apply text-xl;
+        }
+      }
+    }
+
+  }
+}
+
+
+/* 
+* thank you page 
+*/
+.thankyou-block{
+  @apply duration-500 hover:shadow-default flex-1 bg-white p-8 rounded-md mb-6 md:mb-8 flex flex-col items-center justify-center;
+
+  &.sent{
+    @apply text-green-500 font-bold;
+
+    &:before{
+      @apply w-16 h-16 bg-green-100 text-green-500 flex items-center justify-center text-2xl rounded-full mb-2;
+      content: "\ea9d";
+      font-family: 'sallaicons';
+    }
+  }
+}
+
+
+/* 
+* Order rating actions
+*/
+
+.rating-actions{
+  @apply flex items-center gap-2;
+  salla-button {
+    button {
+      @apply rounded mx-0 w-8 h-8 #{!important}
+    }
+  }
+}
+
+/* 
+* Blog single page
+*/
+.blog-single .s-comments-item-user-info-name{
+  @apply mx-0
+}
+/*
+* Engine account layout (/account/*) has no registry override. The mobile theme
+* hides its desktop chrome so each account screen can own its Figma header.
+*/
+/* Match `div`, not the `.container`/`.flex` classes on this markup: Tailwind v3 copies every
+   rule naming a utility class into each `@apply` of it, so `.flex` here was duplicated ~1,000
+   times into the shipped CSS. */
+div:has(> div > nav.sidebar) {
+  @apply max-w-none p-0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+
+  > div > nav.sidebar,
+  > div > .main-content > h1 {
+    @apply hidden;
+  }
+
+  /* Stretch the page so sticky bottom bars (order banner, footer) sit at the
+     bottom even when the content is short. */
+  > div {
+    flex: 1;
+  }
+  > div > .main-content {
+    display: flex;
+    flex-direction: column;
+
+    > * {
+      flex: 1;
+    }
+  }
+}
+.profile-header:has(+ div > div > nav.sidebar) {
+  @apply hidden;
+}
+
+.order-tracking-map {
+  height: 454px;
+}
+
+/* Wishlist: the SDK drops its own `<salla-wishlist-actions>` into the page's first hook
+   slot. It needs a `<salla-products-list>` the engine page doesn't render, so it sits
+   disabled beside the engine's working share bar (WishlistShare.tsx). Raed hides it too. */
+#wishlist > salla-wishlist-actions {
+  display: none;
+}
+
+/* The bar is `justify-end` but the engine pins the menu to the button's start edge, so on
+   phones it opened past the screen. Hang it from the end edge. */
+.s-wishlist-actions-dropdown .s-wishlist-actions-menu {
+  @apply border border-neutral-100;
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+  max-width: calc(100vw - 2rem);
+}
+
+/* Wishlist cards (engine WishlistPage) as divided rows, like the notifications list:
+   image and name at the start, add to cart and remove at the end; the actions wrap
+   under the name on narrow screens. */
+.account-wishlist {
+  // The hidden SDK widget and the empty hook slots would each add a `space-y` gap.
+  #wishlist > * {
+    margin-top: 0;
+  }
+
+  .s-products-list-row-cards {
+    @apply gap-0 divide-y divide-neutral-100;
+  }
+
+  .product-entry--wishlist {
+    @apply flex-row flex-wrap items-center gap-3 rounded-none px-0 py-3;
+
+    &:hover {
+      box-shadow: none;
+    }
+
+    // Children: the share-selection checkbox (selection mode only), the picture and name,
+    // then the buttons. The name keeps 12rem; below that the buttons drop to their own line.
+    > div:first-of-type {
+      @apply mb-0 min-w-0;
+      flex: 1 1 12rem;
+    }
+
+    > div:last-child {
+      @apply ms-auto;
+    }
+
+
+    .product-entry__image {
+      @apply h-16 w-16 shrink-0 rounded-lg bg-smoke;
+    }
+
+    h3 {
+      @apply mb-1 line-clamp-2 font-medium text-ink;
+      padding-inline-end: 0;
+    }
+
+    .btn--delete {
+      @apply bg-smoke text-neutral-500;
+
+      &:hover {
+        @apply text-discount;
+      }
+    }
+  }
+
+  .s-items-list-end {
+    display: none;
+  }
+
+  // Share selection: each card's checkbox and "select all". @tailwindcss/forms fills a
+  // checked box with the text colour (its default is blue).
+  .s-wishlist-select,
+  .s-wishlist-actions-select-all input {
+    @apply size-5 shrink-0 cursor-pointer rounded-md border-neutral-300 text-brand;
+
+    &:focus {
+      @apply ring-0 ring-offset-0;
+    }
+
+    &:focus-visible {
+      @apply ring-2 ring-brand ring-offset-1;
+    }
+  }
+}

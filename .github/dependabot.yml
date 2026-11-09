@@ -1,0 +1,36 @@
+version: 2
+
+# Salla's private npm packages (@salla.sa/*) are published to the npm registry
+# as private packages and require an auth token. The token lives in the
+# org-level Dependabot secret NPM_TOKEN (see SAL-1382).
+registries:
+  private-npm:
+    type: npm-registry
+    url: https://registry.npmjs.org
+    token: ${{ secrets.NPM_TOKEN }}
+
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    ignore:
+      - dependency-name: "SallaApp/*"
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    registries:
+      - private-npm
+    schedule:
+      interval: "weekly"
+    versioning-strategy: increase-if-necessary
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+    groups:
+      salla-packages:
+        patterns:
+          - "@salla.sa/*"
+      dev-deps:
+        dependency-type: "development"

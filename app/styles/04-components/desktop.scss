@@ -1,0 +1,632 @@
+/*
+  Web-desktop layout (QCD-42). All rules are gated by `web-desktop` so the
+  mobile web shell (below 768px) and the native app webview keep the mobile layout.
+*/
+
+.desktop-header,
+.desktop-footer,
+.desktop-markets {
+  display: none;
+}
+
+// Lets a back button sit in the mobile bar's flex row. Web desktop hides it below.
+.mobile-only {
+  display: contents;
+}
+
+// The enhanced image slider mounts this only when the merchant sets `show_controls`.
+// The platform products slider mounts it unless that flag is false.
+// Products-with-header, quick links, and the promotional bar never mount it.
+// The category tab and chip strips mount their own copy (ScrollStrip).
+// The web-desktop block below is what shows them (`display: flex`, 56px, mint ring, offsets).
+.s-block--products-slider .s-slider-block__title-nav,
+.s-block--slider-products-with-header .s-slider-block__title-nav,
+.s-block--enhanced-slider .s-slider-block__title-nav,
+.home-banner-slider .s-slider-block__title-nav,
+.category-toolbar .s-slider-block__title-nav {
+  display: none;
+}
+
+// Wide phones and small tablets (481px up to the desktop cutoff): the tracking
+// banner stays in flow above the bottom nav, its strip keeps the page background
+// edge to edge, but the card inside stops stretching. Same width as the
+// web-desktop float below.
+@media (min-width: 481px) {
+  .order-tracking-banner > * {
+    width: min(463px, 100%);
+    margin-inline: auto;
+  }
+}
+
+@include web-desktop {
+  // html is the only scrollport. `overscroll-behavior: none` still allows
+  // scrolling — it only stops the rubber-band that paints white under the footer.
+  & {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: none;
+    background-color: #fff;
+  }
+
+  body {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+    overscroll-behavior: none;
+    background-color: #fff;
+  }
+
+  .app-inner {
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  // One shell gutter for every route. Pages keep their own inner padding.
+  // Web-desktop only — mobile and the native webview never see this.
+  #main-content {
+    overflow: visible;
+    flex: 1 0 auto;
+    --home-inline-pad: clamp(1.5rem, 10.28vw, 9.25rem);
+    padding-inline: var(--home-inline-pad);
+    padding-block: 24px;
+  }
+
+  .mobile-header,
+  .app-bottom-nav {
+    display: none;
+  }
+
+  // MobileOnly is the back bar (and the category back-and-search bar). Not a second header.
+  .mobile-only {
+    display: none;
+  }
+
+  // The account page's store credentials stand in for the footer, which web desktop shows.
+  .account-credentials {
+    display: none;
+  }
+
+  .desktop-header {
+    display: flex;
+  }
+
+  // Cart count on the header basket: the 11px the product sheet's badge uses (no scale step).
+  .desktop-header__cart-count {
+    font-size: 11px;
+  }
+
+  // `topnav_is_dark` on (the engine adds `topnav-is-dark` to <body>): black, with translucent controls.
+  body.topnav-is-dark .desktop-header {
+    background-color: #000;
+    color: #fff;
+
+    .desktop-header__brand > span,
+    .desktop-header__promise,
+    .desktop-header__tail,
+    .desktop-header__delivery button {
+      color: #fff;
+    }
+
+    // PinIcon, ChevronDownIcon and FlashIcon hardcode their fills.
+    .desktop-header__delivery button path,
+    .desktop-header__delivery > p path {
+      fill: currentColor;
+    }
+
+    .desktop-header__search-field input,
+    .desktop-header__search-field input::placeholder {
+      color: #fff;
+    }
+
+    .desktop-header__control {
+      border-color: rgb(255 255 255 / 0.1);
+      background-color: rgb(255 255 255 / 0.1);
+      color: #fff;
+
+      img {
+        filter: invert(1);
+      }
+    }
+  }
+
+  .desktop-markets {
+    display: flex;
+    border-bottom: 1px solid #f4f4f4;
+
+    // Tabs shrink below 268px on a narrow window; past that the row scrolls.
+    &__tabs {
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    &__tab {
+      flex: 0 1 268px;
+      min-width: 120px;
+    }
+  }
+
+  .desktop-footer {
+    display: flex;
+    padding-inline: clamp(1.5rem, 10.28vw, 9.25rem);
+
+    // Figma 3208:37426 is a 1440 single row. Below that, wrap sections instead of
+    // crushing the category columns (min-w-0 + 3 flex-1 cols was the mid-width bug).
+    &__nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 34px;
+      width: 100%;
+    }
+
+    &__section--categories,
+    &__section--pages {
+      flex: 1 1 16rem;
+      min-width: min(100%, 16rem);
+    }
+
+    &__section--contact,
+    &__section--apps {
+      flex: 0 1 auto;
+    }
+
+    &__links {
+      width: 100%;
+      column-gap: 24px;
+
+      > a {
+        display: block;
+        max-width: 100%;
+        margin-bottom: 10px;
+        overflow-wrap: break-word;
+        break-inside: avoid;
+      }
+    }
+
+    &__links--categories {
+      column-count: 3;
+      column-width: 8.5rem;
+    }
+
+    &__links--pages {
+      column-count: 2;
+      column-width: 8rem;
+    }
+
+    &__bottom {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+  }
+
+  // Home keeps the taller block rhythm. Inline pad comes from #main-content.
+  #main-content.app-main--home {
+    padding-block: 44px;
+
+    // Merged promo is flush under the header (Figma 2667:7650). `first-of-type`
+    // skips leading <salla-hook> nodes; padding-bottom stays 44px.
+    &:has(> .s-block--promotional-banner.merge-with-top-component:first-of-type),
+    &:has(> .s-block:empty:first-of-type + .s-block--promotional-banner.merge-with-top-component) {
+      padding-top: 0;
+    }
+  }
+
+  // Home blocks used the 10px engine container; Figma is full-bleed inside the page padding.
+  .s-block--products-slider,
+  .s-block--enhanced-square-banners,
+  .s-block--testimonial,
+  .s-block--store-features,
+  .s-block--square-photos,
+  .s-block--main-links .container,
+  .container {
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  // The engine's announcement bar is a `.container` too: line it up with the header row.
+  .s-advertisement-content {
+    @apply px-11;
+  }
+
+  .s-block {
+    margin-top: 24px;
+  }
+
+  // Not nested under .s-block: `#main-content &` would put #main-content before
+  // the mixin's html prefix and never match. #main-content's 44px is the gap.
+  #main-content .s-block:last-of-type,
+  #main-content .s-block:is(:has(+ .s-block:empty:last-of-type)) {
+    padding-bottom: 0;
+  }
+
+  .s-block--enhanced-slider,
+  .s-block--full-bg:first-of-type,
+  :where(.s-block:empty:first-of-type) + .s-block--full-bg {
+    margin-top: 0;
+  }
+
+  // RenderWhenVisible writes the phone height as an inline min-height, which
+  // beats a plain declaration. !important keeps the desktop floor while that
+  // inline value is set. 320px is the highlight row only — a blanket floor
+  // would stretch the 364px-wide slider.
+  .s-block--enhanced-slider--center-highlight {
+    min-height: 320px !important;
+
+    // Placeholder has no inner highlight class; size its slide box with the section.
+    // Cap at the content column. Height follows 754/320 so a narrow window does not stretch it.
+    .home-banner-slider .home-banner-slider__slide.swiper-slide {
+      width: min(754px, 100%);
+      height: auto;
+      aspect-ratio: 754 / 320;
+    }
+  }
+
+  // Before mount only: 25px title + 16px + 179px card (no delivery promise).
+  .s-block--products-slider[style*='min-height'] {
+    min-height: 220px !important;
+  }
+
+  // Before mount only; mounted tiles render from page data at their own height.
+  .s-block--main-links[style*='min-height'] {
+    min-height: 213px !important;
+  }
+
+  // Before mount only: 30px title + 12px + 4px + 114px brand tiles.
+  .s-block--brands[style*='min-height'] {
+    min-height: 160px !important;
+  }
+
+  // Figma 2667:7650 — promo bar is 1440×45, x=0, no page gutter.
+  .s-block--promotional-banner {
+    margin-inline: calc(-1 * var(--home-inline-pad));
+    width: calc(100% + 2 * var(--home-inline-pad));
+    max-width: none;
+
+    // `.s-block { margin-top: 24px }` is `html:not(.mobile-webview) .s-block`,
+    // which beats the unscoped merge rule in home-blocks.scss.
+    &.merge-with-top-component {
+      margin-top: 0;
+    }
+
+    // Enhanced slider zeros its own margin (it is often first). Keep the 24px
+    // home-block gap when it follows the promo strip.
+    &:where(:not(:empty)) + .s-block,
+    &:where(:not(:empty)) + :where(.s-block:empty) + .s-block {
+      margin-top: 24px;
+    }
+
+    .promotional-banner {
+      padding-inline: 0;
+    }
+  }
+
+  // Twilight centers titles in a 1280px column (`margin-inline: auto`). Figma
+  // 3208:36830 pins the heading to the same content edge as the product row.
+  .s-slider-block__title,
+  .s-block__title {
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .s-slider-block__title h2,
+  .main-links-slider .s-slider-block__title h2 {
+    font-size: 22px;
+    line-height: normal;
+  }
+
+  .home-banner-slider {
+    margin: 0;
+
+    // Title is 0-height (`s-slider-has-notitle`); `top: 50%` on the nav must
+    // resolve against the slider, not the title, so arrows sit on the 320px row.
+    .s-slider-block__title {
+      position: static;
+    }
+
+    // `[class~='flex']` is the placeholder track. A `.flex` selector here makes
+    // Tailwind reject `@apply flex` for the whole web-desktop block.
+    .swiper,
+    &:not(.hydrated) > div[slot='items'],
+    > [class~='flex'] {
+      padding-block: 0;
+    }
+
+    .home-banner-slider__slide.swiper-slide {
+      width: 364px;
+      height: auto;
+      aspect-ratio: 754 / 320;
+      border-radius: 16px;
+    }
+
+    // Same coverflow as mobile: every slide shares one box, neighbors scale down.
+    &.home-banner-slider--center-highlight {
+      .swiper {
+        overflow: hidden;
+      }
+
+      .home-banner-slider__slide.swiper-slide {
+        width: min(754px, 100%);
+        height: auto;
+        aspect-ratio: 754 / 320;
+      }
+    }
+  }
+
+  // 114px tiles like the product cards' fixed 127px: wider windows add columns, not tile size.
+  .main-links-grid .main-links-grid__items {
+    grid-template-columns: repeat(auto-fill, 114px);
+    justify-content: space-between;
+    gap: 16px 24px;
+  }
+
+  .main-links-slider__item h2 {
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  // Figma 2741:342 / 2741:346 — 56px white buttons, mint-light ring, overlay
+  // the image row and sit half-out on the content edges.
+  .s-block--products-slider,
+  .s-block--slider-products-with-header,
+  .s-block--enhanced-slider {
+    overflow: visible;
+  }
+
+  .s-block--products-slider .s-slider-wrapper,
+  .s-block--slider-products-with-header .s-slider-wrapper,
+  .s-block--enhanced-slider,
+  .home-banner-slider {
+    position: relative;
+  }
+
+  .s-block--products-slider .s-slider-block__title,
+  .s-block--slider-products-with-header .s-slider-block__title {
+    position: relative;
+    z-index: 2;
+  }
+
+  .s-block--slider-products-with-header .container {
+    overflow: visible;
+  }
+
+  .s-block--products-slider .s-slider-block__title-nav,
+  .s-block--slider-products-with-header .s-slider-block__title-nav,
+  .s-block--enhanced-slider .s-slider-block__title-nav,
+  .home-banner-slider .s-slider-block__title-nav,
+  .category-toolbar .s-slider-block__title-nav {
+    display: flex;
+    position: absolute;
+    z-index: 2;
+    inset-inline: -28px;
+    width: auto;
+    margin: 0;
+    justify-content: space-between;
+    pointer-events: none;
+    transform: translateY(-50%);
+  }
+
+  .s-block--products-slider .s-slider-block__title {
+    margin-bottom: 16px;
+  }
+
+  .s-block--products-slider .s-slider-block__title-nav {
+    top: 117px;
+  }
+
+  .s-block--slider-products-with-header .s-slider-block__title-nav {
+    top: 60px;
+  }
+
+  .s-block--enhanced-slider .s-slider-block__title-nav,
+  .home-banner-slider .s-slider-block__title-nav,
+  .category-toolbar .s-slider-block__title-nav {
+    top: 50%;
+  }
+
+  .s-block--products-slider,
+  .s-block--slider-products-with-header,
+  .s-block--enhanced-slider,
+  .home-banner-slider,
+  .category-toolbar {
+    .s-slider-nav-arrow {
+      pointer-events: auto;
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      border: 1px solid;
+      @apply border-brand-tint-hover bg-white;
+      box-shadow:
+        0 20px 25px rgb(18 18 23 / 0.1),
+        0 10px 10px rgb(18 18 23 / 0.04);
+
+      &.swiper-button-disabled {
+        opacity: 1;
+      }
+
+      // Swiper locks both arrows when every slide already fits.
+      &.swiper-button-lock {
+        display: none;
+      }
+    }
+
+    // The SVGs are masks so the arrow takes the merchant's brand color.
+    .s-slider-button-icon {
+      width: 24px;
+      height: 24px;
+      @apply bg-brand;
+      mask-repeat: no-repeat;
+      mask-position: center;
+      mask-size: 24px 24px;
+
+      svg {
+        display: none;
+      }
+    }
+
+    // title-nav is always dir=rtl, so next sits on the visual left.
+    .s-slider-next .s-slider-button-icon {
+      mask-image: url('../images/arrow-left-02-outline.svg');
+    }
+
+    .s-slider-prev .s-slider-button-icon {
+      mask-image: url('../images/arrow-right-02-outline.svg');
+    }
+  }
+
+  // The header's field searches; its tablet icon and the page's own field stay out of the way.
+  .desktop-header__search,
+  .search-page-header {
+    display: none;
+  }
+
+  // The "view cart" bar and the tracking banner float bottom-center over the
+  // page. When both show, the tracking banner stacks above the cart bar.
+  .bottom-docks {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    z-index: 40;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 12px;
+    width: calc(100% - 2rem);
+    pointer-events: none;
+    transform: translateX(-50%);
+
+    > * {
+      pointer-events: auto;
+    }
+  }
+
+  .cart-added-bar {
+    width: min(560px, 100%);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgb(0 0 0 / 0.16);
+  }
+
+  .order-tracking-banner {
+    width: min(463px, 100%);
+    padding: 0;
+    background: transparent;
+  }
+
+  $tracking-card-padding: 12px;
+
+  .order-tracking-banner__card {
+    padding: $tracking-card-padding;
+    box-shadow: 0 4px 24px rgb(0 0 0 / 0.16);
+  }
+
+  // A stacked card peeks its padding plus the 20px header row.
+  .order-tracking-banner__peek {
+    height: $tracking-card-padding + 20px;
+  }
+}
+
+// Touch screens (iPad at any width) swipe the rows; the arrows are for mouse users.
+@include web-desktop {
+  @media (hover: none) {
+    .s-slider-block__title-nav {
+      display: none !important;
+    }
+  }
+}
+
+// Web tablet (768–1023px): the desktop layout with a 24px gutter and a compact header.
+@include web-tablet {
+  #main-content,
+  .desktop-footer {
+    --home-inline-pad: 24px;
+    padding-inline: var(--home-inline-pad);
+  }
+
+  .desktop-header {
+    padding-inline: 24px;
+
+    // At the narrow end the logo and delivery block give up width so the actions still fit.
+    // 24px at 834 (Figma), easing to 20px at 768.
+    &__row {
+      gap: clamp(12px, 5vw - 18px, 24px);
+    }
+
+    &__brand,
+    &__delivery {
+      flex-shrink: 1;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    &__brand img {
+      max-width: 100%;
+    }
+
+    // Visually hidden; the label stays the button's accessible name.
+    &__label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    // No room for the search field: an icon to the /search page, which keeps its own field.
+    &__search-field {
+      display: none;
+    }
+
+    &__search {
+      display: flex;
+      flex: none;
+      justify-content: center;
+      width: 48px;
+      margin-inline-start: auto;
+      padding-inline: 0;
+    }
+  }
+
+  // Six columns at most; narrower windows drop columns instead of shrinking tiles below 100px.
+  .main-links-grid .main-links-grid__items {
+    grid-template-columns: repeat(auto-fill, minmax(max(100px, (100% - 5 * 24px) / 6), 1fr));
+  }
+
+  .s-block--enhanced-slider--center-highlight
+    .home-banner-slider
+    .home-banner-slider__slide.swiper-slide,
+  .home-banner-slider.home-banner-slider--center-highlight .home-banner-slider__slide.swiper-slide {
+    width: min(585px, 100%);
+    aspect-ratio: 754 / 320;
+  }
+
+  // The desktop 320px floor would leave a gap under the 585×248 tablet card.
+  .s-block--enhanced-slider--center-highlight {
+    min-height: 248px !important;
+  }
+
+  // Rows run to the screen edge: the banner on both sides, product rows on the trailing side.
+  .home-banner-slider--center-highlight .swiper {
+    margin-inline: calc(-1 * var(--home-inline-pad));
+  }
+
+  .s-block--products-slider .s-slider-wrapper,
+  .s-block--slider-products-with-header .s-slider-wrapper {
+    margin-inline-end: calc(-1 * var(--home-inline-pad));
+  }
+
+  // The desktop -28px offset would push the arrows past the 24px gutter.
+  .s-block--products-slider .s-slider-block__title-nav,
+  .s-block--slider-products-with-header .s-slider-block__title-nav,
+  .s-block--enhanced-slider .s-slider-block__title-nav,
+  .home-banner-slider .s-slider-block__title-nav,
+  .category-toolbar .s-slider-block__title-nav {
+    inset-inline: 0;
+  }
+}

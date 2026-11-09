@@ -1,0 +1,415 @@
+salla-slider{ 
+  @apply block;
+  
+  &.details-slider{
+    .s-slider-container{ 
+      @apply bg-white border-[1px] rounded-md;
+    }
+
+    .swiper-slide{
+      @apply relative rounded-md bg-white ring-1 ring-inset ring-gray-100;
+    }
+
+    salla-button.btn--wishlist{
+      @apply absolute rtl:right-4 ltr:left-4 bottom-4 z-[2] sm:hidden;
+    }
+
+    .s-slider-block__title-nav{
+      @apply hidden sm:flex;
+    }
+  }
+
+  .slide--one-fourth{
+    @apply h-auto w-full sm:w-1/2 md:w-1/3 lg:w-1/4 max-w-[250px] sm:max-w-[320px];
+  }
+
+  .slide--one-sixth{
+    @apply w-1/2 sm:w-2/6 md:w-1/4 lg:w-1/6;
+  }
+
+
+  // Fix Flickering in Safari 
+  .swiper-slide{
+    -webkit-transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+  }
+}
+
+.product-details-gallery {
+  margin-inline: -2px;
+
+  // Same 414×244 frame as `__slider` (`aspect-ratio: 207 / 122`).
+  &__placeholder {
+    aspect-ratio: 207 / 122;
+  }
+
+  &__slider {
+    @apply relative block;
+
+    // 414x244 image frame.
+    .s-slider-container,
+    .product-details-gallery__slide,
+    &:not(.hydrated) > [slot='items'] {
+      @apply overflow-hidden rounded-xl border-0 bg-white;
+      aspect-ratio: 207 / 122;
+    }
+
+    .swiper-wrapper,
+    .product-details-gallery__slide {
+      @apply h-full w-full ring-0;
+    }
+
+    // The engine's carousel type adds a "peek next slide" gutter on mobile.
+    &.carousel-slider .swiper {
+      @apply mx-0 px-0;
+    }
+    &.carousel-slider .swiper-wrapper > div {
+      @apply px-0;
+    }
+
+    // Pre-hydration: show only the first slide.
+    &:not(.hydrated) > [slot='items'] > :not(:first-child) {
+      @apply hidden;
+    }
+  }
+
+  // SallaSlider's React wrapper shows this skeleton while salla-slider loads;
+  // hold the image frame so the details below don't jump up and back.
+  .s-skeleton-slider {
+    @apply overflow-hidden rounded-xl;
+    aspect-ratio: 207 / 122;
+  }
+
+  .s-skeleton-slider-image {
+    @apply h-full w-full;
+  }
+
+  .s-skeleton-slider-thumbs {
+    @apply hidden;
+  }
+
+  &__counter {
+    @apply absolute bottom-3 left-1/2 z-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-ink/70 px-2 py-0.5 text-xs font-normal leading-4 text-white;
+  }
+}
+
+.promotion-title{
+  @apply absolute z-10 top-4 rtl:right-0 ltr:left-0 font-bold text-sm bg-red-800 text-white rtl:rounded-l-md ltr:rounded-r-md;
+  @apply w-auto m-0 px-3 py-2 #{!important};
+}
+
+.home-slider {
+  &__slide {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    &:not(.loaded) {
+      .overlay {
+        opacity: 0;
+      }
+    }
+  }
+}
+
+// While the static first banner shows, the booting control lays out behind it
+// unseen; visibility also keeps its links out of the tab order.
+.photos-slider-host:has(> .photos-slider--static) {
+  position: relative;
+
+  > salla-slider {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+// Photos block slider. `.photos-slider` without the tag: the pre-hydration
+// first slide uses the same classes so it sits where Swiper will put it.
+.photos-slider {
+  display: block;
+
+  .swiper-pagination-bullets.swiper-pagination-horizontal{
+    @apply bottom-0;
+  }
+
+  .swiper{
+    @apply rtl:pl-6 ltr:pr-6 rtl:md:pl-12 ltr:md:pr-12 pb-10;
+  }
+
+  .swiper{
+    @apply w-full mx-0;
+  }
+
+  &:not(.hydrated) > div {
+    @apply justify-center;
+  }
+
+  .swiper-slide {
+    @apply h-auto w-full lg:w-[80%] relative rounded-md overflow-hidden mx-1.5 md:mx-3 lg:mx-4;
+  }
+  
+  .swiper-pagination-bullet:not(.swiper-pagination-bullet-active){
+    @apply bg-gray-300;
+  }
+  
+  @media (max-width: 1024px) {
+    .swiper{
+      @apply rtl:pr-4 ltr:pl-4;
+    }
+
+    .swiper-slide {
+      @apply px-0;
+    }
+  }
+}
+
+.swiper:not(.swiper-initialized) {
+  .swiper-button {
+    opacity: 0;
+  }
+}
+
+// testimonials-slider
+.s-block--testimonials{
+  &.container{
+    @apply p-0 lg:px-2.5;
+  }
+
+  .s-slider-block__title{
+    @apply px-2.5 lg:px-0;
+
+    &-nav{
+      @apply hidden lg:flex max-w-[88%] top-[65%] #{!important};
+
+      button{ 
+        @apply border-gray-100 shadow-gray-300 #{!important};
+      }
+    }
+  }
+}
+
+
+.best-products-slider {
+  .swiper-wrapper {
+    @media screen and (min-width: 768px) {
+      height: 510px;
+
+      .swiper-slide {
+        height: calc((100% - 30px) / 2);
+      }
+    }
+  }
+}
+
+//general
+.swiper-button-disabled {
+  opacity: 0.5;
+}
+
+// bullet pagination -------
+salla-slider{
+  .swiper-pagination-bullet {
+    width: 20px;
+    border-radius: 5px;
+    background: #fff;
+    opacity: 0.3;
+
+    &-active {
+      opacity: 1;
+      background-color: var(--color-primary);
+    }
+  }
+
+  .swiper-pagination-bullets.swiper-pagination-horizontal{
+    @apply bottom-3 sm:bottom-6; 
+  }
+}
+
+
+// Offer slider
+.offer-slider .s-slider-block__title{
+  @apply mb-5 relative; 
+
+  &:before{
+    @apply text-5xl font-normal text-red-50 absolute leading-none top-4 rtl:right-0 ltr:left-0;
+    content: "\ee30";
+    font-family: 'sallaicons';
+  }
+
+  h2{
+    @apply text-lg text-red-400;
+  }
+
+  p{
+    @apply mt-1 leading-6 line-clamp-none;
+  }
+}
+
+.bank-offer .s-slider-block__title {
+  @apply hidden;
+}
+
+// move to slider component
+model-viewer[style*="width"]:before{
+  @apply hidden;
+}
+
+
+// Blog slider
+.blog-slider{
+  .swiper-slide img{
+    @apply min-h-[380px] max-h-[480px] md:max-h-[680px];
+  }
+}
+// Home banner slider: one 242px card plus a peek on phones; highlight mode enlarges the active center card.
+.home-banner-slider {
+  @apply my-4;
+
+  // Direct child only. The booting control is nested, and this rule must not hide its slides.
+  &:not(.hydrated) > div[slot='items'] {
+    // Slider hydrates to an ltr track; force the same direction pre-hydration on rtl pages.
+    direction: ltr;
+    @apply flex items-center gap-2 overflow-hidden;
+
+    // Keep the first slide as the only LCP candidate until Swiper inits.
+    > :not(:first-child) {
+      @apply hidden;
+    }
+  }
+
+  // Measurable, but not the LCP element. A class rewrite on the host would drop
+  // Stencil's `hydrated` class, so the static slide is what shows and hides it.
+  &:has(> .home-banner-slider__static) {
+    position: relative;
+
+    > salla-slider {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      visibility: hidden;
+      pointer-events: none;
+    }
+  }
+
+  // A centered slide can land on a fractional x (393/375px phones, 1025px desktop). Pixel
+  // snapping then paints it slightly smaller than Swiper's transformed copy, so Chrome logs a
+  // second, late LCP at hydration. A compositor layer keeps the unsnapped size.
+  .home-banner-slider__static > .home-banner-slider__slide {
+    will-change: transform;
+  }
+
+  .home-banner-slider__slide.swiper-slide {
+    @apply relative w-[242px] shrink-0 rounded-lg;
+    // 754/320 in both modes and on every screen, so one 1508×640 upload is never cropped.
+    aspect-ratio: 754 / 320;
+  }
+
+  // Same darkening layer as `.s-block--hero-slider .overlay-bg`; local so it
+  // still paints when the slider is not wrapped in that block.
+  .home-banner-slider__slide.overlay-bg::after {
+    @apply pointer-events-none absolute inset-0 bg-black/60 content-[''];
+  }
+
+  &.home-banner-slider--center-highlight {
+    &:not(.hydrated) > div[slot='items'] {
+      @apply justify-center;
+    }
+
+    // Wide phones and small tablets: the highlight scales with the viewport
+    // (242/390 ≈ 62vw) so the neighbours keep peeking instead of three full
+    // cards fitting side by side. Web desktop takes over at 768px.
+    @media (min-width: 481px) {
+      .home-banner-slider__slide.swiper-slide {
+        width: min(585px, 62vw);
+      }
+    }
+
+    .home-banner-slider__slide.swiper-slide-active {
+      @apply z-[1];
+    }
+  }
+}
+
+// Main category links: four tiles per row, wrapping every item.
+.main-links-slider {
+  .s-slider-block__title {
+    @apply mb-3;
+  }
+
+  .main-links-slider__item.slide--cat-entry {
+    @apply h-auto w-24 flex-col justify-start rounded-none border-0 bg-transparent p-0 text-center shadow-none hover:shadow-none;
+  }
+
+  .main-links-slider__thumb {
+    @apply flex h-24 w-24 items-center justify-center overflow-hidden rounded-lg bg-brand-reverse;
+  }
+
+  .main-links-slider__thumb img {
+    @apply h-full w-full object-cover;
+  }
+
+  .main-links-slider__thumb i {
+    @apply m-0 text-[40px] text-tomato;
+  }
+
+  // Two lines at 17px. The placeholder reserves 34px; a one-line label would pull the row up.
+  .main-links-slider__item h2 {
+    @apply line-clamp-2 break-words text-[13px] font-medium leading-[17px] text-ink;
+    min-height: 34px;
+  }
+}
+
+// 8px gutters between the four columns.
+.main-links-grid {
+  .main-links-grid__items {
+    @apply grid grid-cols-4 gap-2;
+  }
+
+  // The tile is a fixed 96px in the track, which is wider than a quarter of the
+  // row once the gutters are taken out — it has to follow the column instead,
+  // or the tiles butt against each other and the gap never shows.
+  .main-links-slider__item.slide--cat-entry {
+    @apply w-full;
+  }
+
+  .main-links-slider__thumb {
+    @apply aspect-square h-auto w-full;
+  }
+}
+
+// 3 cards per view on mobile; the library defaults to one-up below `sm`.
+// Base step only — sm and up restate the library's own values.
+// `!` because swiper's own `.swiper-slide { width: 100% }` outranks a plain
+// width here — the library fights it the same way with `!h-auto`.
+.s-products-slider-card {
+  @apply w-1/3 max-w-none px-1 #{!important};
+  @apply sm:w-1/2 sm:max-w-[320px] sm:px-2 md:w-1/3 lg:w-1/4 #{!important};
+}
+
+// Wide phones and small tablets (481px up to the 768px desktop cutoff) keep the
+// phone layout but add tiles per row instead of growing them. Not gated on the
+// native webview on purpose: a tablet inside the app needs the same. The page
+// grids do the same in desktop-pages.scss and product.scss.
+@media (min-width: 481px) {
+  // 127px card + 24px trailing gap, as on web desktop. Swiper ignores slide
+  // margins, so the gap is padding; `!important` beats the phone rule above.
+  .s-products-slider-card {
+    width: 151px !important;
+    max-width: 151px !important;
+    padding: 0 !important;
+    padding-inline-end: 24px !important;
+  }
+
+  .main-links-grid .main-links-grid__items {
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  }
+}
+
+// Block heading: 20px bold per the design. Unstyled, the h2 falls back to the
+// body's 15px/400 — the reset's `h2 { text-xl }` is outranked here.
+.s-slider-block__title h2 {
+  @apply text-[20px] font-bold leading-normal text-ink;
+}

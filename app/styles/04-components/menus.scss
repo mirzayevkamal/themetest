@@ -1,0 +1,223 @@
+
+// Header menu (HeaderMenu.tsx, mounted on 1024px+ web desktop): Raed's dropdown menu in grocery tokens.
+
+.main-menu > li > a[href*="offer"] {
+  @apply text-discount;
+}
+
+@media only screen and (min-width: 1024px) {
+  // `header_menu_color` set: a full-width colored bar under the header (bleeds past
+  // its px-11 / pb-4 padding) with white links, underlined on hover.
+  .desktop-header .desktop-header__menu--bar {
+    background-color: var(--header-menu-color);
+    // Stretch, not w-full, so the negative margins widen it to both edges.
+    width: auto;
+    margin: 1rem -2.75rem -1rem;
+    padding-inline: 2.75rem;
+
+    .main-menu {
+      @apply justify-center gap-x-8 m-0;
+
+      > li.root-level > a {
+        @apply px-0 font-medium text-white hover:text-white;
+        // Somou's 50px bar: 15px text with 15px above and below.
+        padding-block: 15px;
+        font-size: 15px;
+      }
+
+      > li.root-level:hover > a span {
+        @apply underline underline-offset-8;
+      }
+    }
+  }
+
+  .main-menu {
+    @apply flex flex-wrap items-center -mx-3 mt-2 -mb-4;
+
+    li {
+      > a {
+        @apply flex justify-between items-center transition duration-300 p-3 text-sm hover:text-brand hover:no-underline;
+      }
+
+      &.root-level {
+        @apply inline-block;
+
+        > a {
+          @apply font-bold pt-1 pb-4;
+        }
+      }
+    }
+
+    > .has-children:hover > a {
+      @apply text-brand;
+    }
+
+    .has-children {
+      li a:hover,
+      .has-children:hover > a {
+        @apply bg-neutral-100 text-brand;
+      }
+
+      > a:after {
+        font-family: 'sallaicons';
+        content: "\e970";
+        @apply inline-block transition-transform duration-300 self-end mx-0.5 text-lg opacity-50 leading-4;
+      }
+
+      &.root-level {
+        > a:after {
+          content: "\e96e";
+        }
+
+        &:hover > a:after {
+          opacity: 1;
+          transform: scaleY(-1);
+        }
+      }
+    }
+
+    .sub-menu {
+      @apply z-20 transition opacity-0 invisible pointer-events-none absolute bg-white text-ink -translate-y-3 shadow-default rounded-xl border border-hairline py-2 max-h-[400px] overflow-y-auto;
+
+      .sub-menu {
+        top: -1px;
+        right: 100%;
+
+        [dir="ltr"] & {
+          left: 100%;
+          right: auto;
+        }
+      }
+    }
+
+    li:hover {
+      > .sub-menu {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+    }
+
+    // "More": the overflow links stack in one column, nested levels open inline.
+    #more-menu-dropdown {
+      @apply flex-shrink-0;
+
+      > a {
+        @apply whitespace-nowrap;
+      }
+
+      > .sub-menu {
+        .sub-menu {
+          @apply static opacity-0 invisible transform-none shadow-none border-0 m-0 p-0 bg-transparent max-h-0 overflow-hidden transition-[max-height,opacity,visibility] duration-200 ease-in;
+          transition-duration: 250ms, 200ms, 200ms;
+        }
+
+        li.has-children {
+          @apply relative;
+
+          &:hover > .sub-menu,
+          &:focus-within > .sub-menu {
+            @apply opacity-100 visible max-h-[1000px];
+          }
+        }
+
+        .sub-menu > ul {
+          @apply rtl:pr-4 ltr:pl-4;
+        }
+      }
+    }
+  }
+}
+// Mobile Slide Menu
+@media only screen and (max-width: 1024px) {
+  .filters-opened{
+    .close-filters{
+      display: block !important;
+    }
+  } 
+  .menu-opened{
+    .btn--close-sm.close-mobile-menu{
+      display: block !important;
+    }
+  }
+  .mobile-menu {
+      @apply lg:hidden overflow-hidden;
+
+
+    @media (max-width: 480px) {
+      .btn--close-sm {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        z-index: 99999999;
+      }
+    }
+  }
+
+  .mobile-menu.mobile-menu--light {
+    color: #000;
+    background: #ffffff;
+  }
+
+  .mobile-menu {
+    ul.main-menu li:before{
+      @apply w-2 h-2; 
+    }
+
+    &.mobile-menu--navbar{
+      &:after {
+        @apply transition-all duration-300 rtl:pr-12 ltr:pl-12 text-start opacity-90 font-bold;
+      }
+
+      &.mobile-menu--main{
+        &:after{
+          @apply rtl:pr-3 ltr:pl-3;
+        }
+      }
+    }
+
+    &.mobile-menu--navbar:before {
+      [dir="rtl"] & {
+        transform: rotate(135deg) translateY(77%);
+        right: var(--mm-spn-item-indent);
+        left: auto;
+      }
+    }
+
+    li {
+      a,
+      > span {
+		@apply flex items-center gap-4;
+	  }
+
+	  img{
+		@apply w-12 h-12 object-cover bg-grey pointer-events-none;
+	  }
+
+      a span{
+        padding: 0;
+      }
+
+      &:before {
+        [dir="rtl"] & {
+          width: 6px;
+          height: 6px;
+          top: 50%;
+          left: 25px;
+          left: calc(var(--mm-spn-item-height) / 2);
+          right: auto;
+          border-bottom: 1px solid;
+          border-left: 1px solid;
+          border-right: none;
+          border-top: none;
+        }
+      }
+
+      &:after {
+        width: 100%;
+        border-color: var(--infinte-color);
+      }
+    }
+  }
+}

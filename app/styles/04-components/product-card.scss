@@ -1,0 +1,300 @@
+// Product card styles (ProductCard.tsx and the SDK card markup), split from product.scss so the
+// home critical sheet can carry them without the product page. Imported right after product.scss.
+
+.s-product-card {
+  &-content-footer {
+    > div {
+      @apply w-full;
+    }
+    salla-button.s-button-wrap {
+      @apply w-full;
+    }
+  }
+  &-content-sub {
+    @apply justify-start gap-3;
+  }
+
+  &-starting-price {
+    @apply w-auto;
+  }
+
+  // Prevent layout shift from lazy-loaded images
+  &-image {
+    aspect-ratio: 1;
+
+    img {
+      @apply w-full h-full;
+    }
+  }
+}
+
+// Minimal card
+.s-product-card-minimal .s-product-card-image {
+  @apply rtl:rounded-r ltr:rounded-l;
+}
+
+.s-product-card-starting-price {
+  @apply justify-start gap-2.5;
+
+  h4 {
+    @apply text-red-800;
+  }
+}
+
+.s-product-card-minimal salla-button.s-product-card-wishlist-btn {
+  @apply rtl:left-2.5 ltr:right-2.5 top-2.5;
+}
+
+// Horizontal card
+.s-product-card-horizontal {
+  .s-product-card-content {
+    @apply mb-0;
+  }
+
+  @media (max-width: 480px) {
+    salla-button.s-product-card-wishlist-btn {
+      @apply absolute bottom-2.5 rtl:-right-12 ltr:-left-12;
+    }
+  }
+
+  salla-progress-bar {
+    @apply flex flex-col grow;
+  }
+}
+
+.s-rating-stars-reviews {
+  @apply text-gray-500;
+}
+
+.s-product-card-promotion-title {
+  @apply bg-red-800 text-white;
+}
+
+.s-product-card-sale-price {
+  p {
+    @apply text-red-800 #{!important};
+  }
+
+  span {
+    @apply text-inherit;
+  }
+}
+
+// The grocery look for the standard card markup (ProductCard.tsx). Same class
+// names the engine's own card emits — restyled here, no theme-private block.
+// Declared after the base rules above so these win on equal specificity.
+.s-product-card {
+  @apply flex flex-col gap-1;
+
+  // `h-auto`, `p-0`, `mb-0`, `leading-*` below undo the base `s-product-card-*`
+  // rules further up this file — same specificity, so order is what wins.
+  &-image {
+    @apply relative aspect-[127/120] h-auto rounded-xl border border-neutral-100 bg-white;
+
+    // absolute: in flow, the image beats aspect-ratio via min-height:auto.
+    // :first-child: only the image overlay link — the stepper's product-page
+    // fallback is also a direct <a> and must keep its own bottom-corner position.
+    > a:first-child {
+      @apply absolute inset-0;
+    }
+  }
+
+  &-promotion-title {
+    // rounded-none: the base sheet rounds the RTL-left corners, which clips
+    // the square SVG seal
+    @apply pointer-events-none absolute top-0 start-2 grid size-8 place-items-center rounded-none p-0;
+    @apply text-center text-[11px] font-semibold leading-[14px] text-white;
+    background: url('../images/discount-badge.svg') center / contain no-repeat;
+
+    strong {
+      @apply font-black;
+    }
+  }
+
+  // Merchant promotion text: a pill instead of the discount seal, in the seal's corner (as on
+  // Salla's card), leaving the other top corner to the wishlist heart; clipped to the tile.
+  &-promotion-title--text {
+    @apply top-2 h-auto w-fit truncate rounded-md bg-discount px-1.5 py-0.5 text-[10px] font-bold;
+    // nowrap text has no min-content to shrink to; clamp to the tile minus its inset and the
+    // wishlist heart in the other top corner (2rem, inset 0.5rem, 0.25rem apart)
+    max-width: calc(100% - 3.25rem);
+    background-image: none;
+  }
+
+  // explicit leading: the theme's reset puts 26px on body, ~9px taller than the
+  // design's rows
+  &-content {
+    @apply flex flex-col items-start gap-1 px-0.5 py-0 leading-[17px];
+  }
+
+  &-price {
+    @apply text-[13px] font-bold leading-[17px] text-ink;
+  }
+
+  &-sale-price {
+    @apply flex items-center gap-1 whitespace-nowrap;
+
+    // explicit leading: the base sheet's text-sm puts a 20px line box on both
+    // #D63C00 is darker than the Figma discount token so 13px bold clears 4.5:1.
+    // #737373 (neutral-500) does the same for the 11px struck price. Tokens stay as designed.
+    p {
+      @apply text-[13px] font-bold leading-[17px] #{!important};
+      color: #d63c00 !important;
+    }
+
+    span {
+      @apply text-[11px] leading-[17px] text-neutral-500 line-through;
+    }
+  }
+
+  &-content-title {
+    // the base sheet gives the h3 a 10px bottom margin
+    @apply mb-0;
+
+    // ...and styles this link directly (14px/700), which outranks anything set
+    // on the h3 — so the text properties have to land on the `a` itself.
+    a {
+      @apply line-clamp-2 w-full text-start text-[13px] font-medium leading-[17px] text-ink;
+    }
+  }
+
+  // Skeleton bar for the title: two lines of the 17px leading above.
+  &-content-title-skeleton {
+    height: 34px;
+  }
+
+  &-content-subtitle {
+    @apply mb-0 w-full truncate text-start text-[11px] font-normal leading-tight text-silver;
+  }
+
+  // salla-product-availability as a badge in the stepper's spot, coloured like the
+  // "+" tile per accent_style: soft = brand label on a faint border, outlined = ink on brand. Fixed height + clip because, until it scrolls into
+  // view, the library renders a whole product-card skeleton here.
+  &-notify-slot {
+    // Full width only to cap the badge; taps beside it go through to the image link.
+    @apply pointer-events-none absolute bottom-1 start-1 end-1 z-1 flex h-7.5 justify-end overflow-hidden;
+
+    // Suspense wrapper, availability host and salla-button host: shrink to the tile.
+    > *,
+    salla-product-availability,
+    salla-button {
+      @apply block max-w-full;
+      // not @apply min-w-0: filters.scss keys a selector on .min-w-0, which @apply would copy
+      min-width: 0;
+    }
+  }
+
+  // salla-button lays out row-reverse; narrow tiles ellipsize the label.
+  // :hover too: salla-button's primary hover paints the brand fill, which sticks after a tap.
+  &-notify .s-button-element,
+  &-notify .s-button-element:hover {
+    @apply flex h-7.5 min-h-0 w-auto max-w-full flex-row items-center gap-0.5 whitespace-nowrap rounded-lg border border-brand-tint-hover bg-brand-reverse p-2 text-xxs font-normal leading-3 text-brand shadow-[0_4px_4px_rgba(0,0,0,0.04)];
+  }
+
+  // The button, the subscribed state and the guest modal take taps again.
+  &-notify > * {
+    @apply pointer-events-auto;
+  }
+
+  &-notify .s-button-text {
+    @apply truncate;
+  }
+
+  &-notify .s-button-element::before {
+    @apply size-4 shrink-0 bg-current;
+    content: '';
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 0.832C8.39467 0.832 8.72 0.917333 8.976 1.088C9.328 1.312 9.504 1.64267 9.504 2.08C9.504 2.38933 9.41867 2.69333 9.248 2.992C9.952 3.16267 10.584 3.472 11.144 3.92C11.704 4.368 12.1547 4.91467 12.496 5.56C12.8373 6.20533 13.024 6.896 13.056 7.632L13.072 7.968C13.0933 8.416 13.1253 8.74133 13.168 8.944C13.2533 9.31733 13.424 9.60267 13.68 9.8C13.936 9.99733 14.136 10.24 14.28 10.528C14.424 10.816 14.496 11.1147 14.496 11.424C14.496 11.7333 14.4213 12.0213 14.272 12.288C14.1227 12.5547 13.92 12.768 13.664 12.928C13.408 13.088 13.12 13.168 12.8 13.168H10.448C10.3307 13.744 10.0427 14.2213 9.584 14.6C9.12533 14.9787 8.59733 15.168 8 15.168C7.40267 15.168 6.87467 14.9787 6.416 14.6C5.95733 14.2213 5.66933 13.744 5.552 13.168H3.2C2.88 13.168 2.592 13.088 2.336 12.928C2.08 12.768 1.87733 12.5547 1.728 12.288C1.57867 12.0213 1.504 11.7387 1.504 11.44C1.504 11.1413 1.56533 10.856 1.688 10.584C1.81067 10.312 1.984 10.08 2.208 9.888L2.32 9.808C2.576 9.60533 2.74667 9.31733 2.832 8.944C2.87467 8.752 2.90133 8.496 2.912 8.176L2.944 7.632C2.976 6.896 3.16267 6.20533 3.504 5.56C3.84533 4.91467 4.296 4.368 4.856 3.92C5.416 3.472 6.048 3.16267 6.752 2.992C6.58133 2.69333 6.496 2.38933 6.496 2.08C6.496 1.64267 6.672 1.312 7.024 1.088C7.28 0.917333 7.60533 0.832 8 0.832ZM8 3.84C7.28533 3.84 6.62667 4.01067 6.024 4.352C5.42133 4.69333 4.93333 5.15733 4.56 5.744C4.18667 6.33067 3.97867 6.976 3.936 7.68L3.92 7.952C3.89867 8.48533 3.86133 8.88533 3.808 9.152C3.66933 9.77067 3.37067 10.256 2.912 10.608C2.784 10.704 2.68267 10.824 2.608 10.968C2.53333 11.112 2.496 11.2693 2.496 11.44C2.496 11.6427 2.56533 11.8133 2.704 11.952C2.84267 12.0907 3.008 12.16 3.2 12.16H12.8C12.992 12.16 13.1573 12.0907 13.296 11.952C13.4347 11.8133 13.504 11.6427 13.504 11.44C13.504 11.2693 13.4667 11.112 13.392 10.968C13.3173 10.824 13.216 10.704 13.088 10.608C12.6293 10.256 12.3307 9.77067 12.192 9.152C12.1387 8.90667 12.1013 8.58667 12.08 8.192L12.064 7.68C12.0213 6.976 11.8133 6.33067 11.44 5.744C11.0667 5.15733 10.5787 4.69333 9.976 4.352C9.37333 4.01067 8.71467 3.84 8 3.84ZM9.408 13.168H6.592C6.688 13.4667 6.86667 13.7067 7.128 13.888C7.38933 14.0693 7.68 14.16 8 14.16C8.32 14.16 8.61067 14.0693 8.872 13.888C9.13333 13.7067 9.312 13.4667 9.408 13.168ZM8 1.84C7.79733 1.84 7.65333 1.86667 7.568 1.92C7.54667 1.93067 7.53067 1.94667 7.52 1.968C7.50933 1.98933 7.504 2.02667 7.504 2.08C7.504 2.26133 7.568 2.44267 7.696 2.624C7.80267 2.76267 7.904 2.832 8 2.832C8.096 2.832 8.19733 2.76267 8.304 2.624C8.432 2.44267 8.496 2.26133 8.496 2.08C8.496 2.02667 8.49067 1.98933 8.48 1.968C8.46933 1.94667 8.45333 1.93067 8.432 1.92C8.34667 1.86667 8.20267 1.84 8 1.84Z'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+  }
+
+  // Subscribed state: its success copy is longer (and store-overridable), so it drops the
+  // library's bell, spans the slot and wraps to two lines only if it still overflows; the
+  // skeleton the fixed height clips is gone by then. The host draws the chip so the
+  // clamped text box is exactly two lines: with the padding on the text box, a third line
+  // showed through the bottom padding.
+  &-notify-slot:has(.s-product-availability-subscribed) {
+    @apply h-auto;
+
+    > *,
+    salla-product-availability {
+      @apply w-full;
+    }
+  }
+
+  // A status, not a button: a neutral wash, no visible border or shadow,
+  // so it neither reads as the notify-me badge it replaced nor invites a tap. The clear
+  // border keeps the one-line chip at the badge's 30px.
+  &-notify:has(> .s-product-availability-subscribed) {
+    @apply rounded-lg border border-transparent bg-neutral-100 px-0.5 py-2;
+  }
+
+  // Raed's success green; green-700, not its green-500, so 10px text clears 4.5:1.
+  &-notify .s-product-availability-subscribed {
+    @apply line-clamp-2 bg-transparent p-0 text-center text-xxs font-normal leading-3 text-green-700;
+  }
+
+  &-notify .s-product-availability-subs-icon {
+    @apply hidden;
+  }
+
+  &-notify-slot--outlined .s-button-element,
+  &-notify-slot--outlined .s-button-element:hover {
+    @apply border-brand text-ink;
+  }
+
+  // Merchant's equal-height switch: grid rows already stretch the card, so the
+  // content fills it.
+  &-equal-height &-content {
+    @apply grow;
+  }
+}
+
+// AddToCartStepper marks the expanded pill with data-in-cart.
+.s-product-card-image:has([data-in-cart]) {
+  @apply border-brand-tint-hover;
+}
+
+// `primary_button_style: dark`: the call-to-action SallaButtons in ink with white text.
+// The setting toggles `cta-dark` on a container we render; SallaButton puts its
+// className on its own <button> (SSR) or on the host, so match both.
+.cta-dark .cta-button,
+.cta-dark .cta-button:hover,
+.cta-dark .cta-button .s-button-element {
+  @apply border-ink bg-ink text-white #{!important};
+}
+
+// A product list's Load More button is a secondary action beside the cards: it takes the
+// card "+" tile's accent_style look, not a call-to-action fill. It takes no className, so
+// `load-more-outlined` on a container we render switches it to the outlined look.
+.s-items-list-load-more .s-button-element,
+.s-items-list-load-more .s-button-element:hover {
+  @apply border-brand-tint-hover bg-brand-reverse text-brand #{!important};
+}
+
+.load-more-outlined .s-items-list-load-more .s-button-element {
+  @apply border-brand text-ink #{!important};
+}
+
+// Booking and donation cards render salla-add-product-button. Its own <button>
+// never gets the host's class, so style it from the host to match the card's
+// "+" tile.
+.s-product-card-add-button {
+  @apply absolute bottom-1 end-1 z-1;
+
+  salla-button {
+    @apply flex #{!important};
+  }
+
+  svg {
+    @apply size-3.5 #{!important};
+  }
+
+  .s-button-element {
+    @apply size-7.5 min-h-0 min-w-0 rounded-lg border border-brand-tint-hover bg-brand-reverse p-0 text-brand #{!important};
+    box-shadow: 0 4px 4px rgb(0 0 0 / 0.04) !important;
+  }
+
+  &--outlined .s-button-element {
+    @apply border-brand text-ink #{!important};
+  }
+}

@@ -1,0 +1,54 @@
+// Responsive breakpoints mixin
+@mixin mobile-xs {
+  @media(max-width: 400px) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media(max-width: 480px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media(max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media(max-width: 992px) {
+    @content;
+  }
+}
+
+@mixin large-desktop {
+  @media(max-width: 1200px) {
+    @content;
+  }
+}
+
+// Web desktop only — from 768px, the same cutoff as Raed's `md`. Native app
+// webviews keep the mobile shell at every width (Twilight sets `.mobile-webview`
+// on <html>), so these rules must never run there.
+$web-desktop-min: 768px;
+
+@mixin web-desktop {
+  @media (min-width: $web-desktop-min) {
+    html:not(.mobile-webview) {
+      @content;
+    }
+  }
+}
+
+// Web tablet — the web-desktop layout up to 1023px, with tighter overrides.
+$web-tablet-max: 1023px;
+
+@mixin web-tablet {
+  @media (min-width: $web-desktop-min) and (max-width: $web-tablet-max) {
+    html:not(.mobile-webview) {
+      @content;
+    }
+  }
+}

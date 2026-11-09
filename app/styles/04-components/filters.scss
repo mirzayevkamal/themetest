@@ -1,0 +1,35 @@
+// The sort select fits its chosen option, not its longest one; browsers without
+// field-sizing keep the longest-option width.
+.search-sort select {
+  field-sizing: content;
+}
+
+// Search filters by its category chips and the theme's filters drawer, and sorts with
+// its own select, above them. The engine's filters panel stays mounted, hidden: it
+// only applies a selection while the panel is on.
+.search-results {
+  // The title and sort row, and the list's "nothing more to show" line.
+  div:has(> #page-main-title),
+  .filters-trigger,
+  .s-items-list-end {
+    display: none;
+  }
+
+  // The engine's two-column grid: the panel (or its loading skeleton) and the list.
+  div:has(> .min-w-0) {
+    display: block;
+
+    > :not(.min-w-0) {
+      display: none;
+    }
+  }
+
+  // The engine's grid without filters (home-blocks.scss), not its narrower one with them.
+  .s-products-list-wrapper.s-products-list-with-filters {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    @media (max-width: 767px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}

@@ -1,0 +1,618 @@
+/*
+  Block Title
+*/
+.s-block{
+  &__title{
+    @apply center-between mb-4 md:mb-8;
+
+    .right-side{
+      @apply rtl:pl-8 ltr:pr-8;
+    }
+
+    h2{ 
+      @apply text-lg font-bold relative leading-[1.2];
+    }
+
+    p{
+      @apply text-sm opacity-60 mt-2 line-clamp-1 sm:line-clamp-2 rtl:md:pl-16 ltr:md:pr-16;
+    }
+
+    &-nav{
+      @apply hidden sm:flex ltr:flex-row-reverse rtl:space-x-reverse space-x-2.5 rtl:mr-6 ltr:ml-6;
+    }
+  }
+
+  &__display-all{
+    @apply inline-flex items-center gap-2 text-sm font-bold opacity-80 hover:opacity-100;
+
+    i{
+      @apply ltr:rotate-180 inline-block;
+    }
+  }
+}
+
+/*
+  Main slider
+*/
+.s-block--hero-slider{
+  .swiper-slide{
+    @apply relative bg-gray-800;
+    aspect-ratio: 1 / 0.5;
+
+    .swiper-lazy{
+      &:after{
+        @apply content-[''] absolute transition top-0 bg-black/60 w-full h-full;
+      }
+    }
+
+	.overlay-bg{
+		&:after{
+		  @apply content-[''] absolute top-0 bg-black/60 w-full h-full;
+		}
+	  }
+  }
+}
+
+/* Banner Block */
+.banner {
+  @media screen and (min-width: 768px) {
+    &:hover {
+      .banner__title {
+        animation: toTopFromBottom 0.9s;
+      }
+
+      .banner__description {
+        animation: delayKeyframe 0.3s, toTopFromBottom 0.9s 0.3s;
+      }
+    }
+  }
+
+  &--fixed{
+    img{
+      @apply w-full object-cover rounded-md border-none block bg-gray-100;
+    }
+  }
+}
+
+/* Square Banner Block */
+.banner-entry{
+  @apply h-[200px] min-h-[200px] bg-gray-100 text-white text-center p-3 xs:p-4 rounded-md overflow-hidden relative !bg-cover !bg-no-repeat !bg-center;
+
+  article{
+    @apply flex flex-col items-center justify-center h-full p-2.5 
+  }
+  
+  &.square-photos h3{
+    @apply h-full px-3;
+  }
+
+  h3{
+    @apply flex flex-col justify-center xs:px-1;
+   
+    &.text-with-border{
+      @apply xs:border border-dashed border-gray-200 rounded-md;
+
+      span{
+        @apply line-clamp-2;
+      }
+    }
+  }
+
+  p{
+    @apply line-clamp-2 opacity-80;
+  }
+
+  h3,p{
+    @apply lg:opacity-0  transition-all duration-300 relative z-1 lg:translate-y-6;
+  }
+  
+  &:hover{
+    h3{
+      @apply opacity-100 translate-y-0;
+    }
+
+    p{
+      @apply opacity-80 translate-y-0;
+    }
+  }
+
+}
+
+.has-overlay{ 
+  &:after{
+    @apply content-[''] h-full w-full bg-black/60 absolute top-0 left-0 transition-colors duration-300;
+  }
+
+  &.with-hover{
+    &:after{
+      transition: opacity .3s;
+      opacity: 0;
+    }
+    &:hover{
+      &:after{
+      opacity: 1;
+    }
+    }
+  }
+
+  &:hover:after{
+    @apply bg-black/70
+  }
+}
+
+
+/* Full banner block */
+.full-banner-entry {
+  @apply row-span-2 bg-stone-200 transition-opacity hover:opacity-95 bg-center bg-cover text-white text-center p-5 overflow-hidden relative bg-fixed;
+  aspect-ratio: 12 / 5;
+  min-height: 320px;
+
+  background-attachment: initial;
+
+  &::after,
+  &::before {
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right: -93%;
+    content: "";
+    background: var(--color-primary);
+    position: absolute;
+    transition: all 0.3s ease-in-out;
+    transform: rotate(220deg) translateY(-50%) translateX(33%);
+    opacity: 0.25;
+  }
+
+  &::before {
+    background: #fff;
+    right: auto;
+    transform: rotate(220deg) translateY(-40%) translateX(0);
+
+    [dir="ltr"] & {
+      left: -52%;
+    }
+  }
+
+  @media (max-width: 1330px) {
+    &::after {
+      top: -50%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    &::before {
+      top: 20%;
+    }
+
+    &::after {
+      top: -80%;
+    }
+  }
+}
+
+/*
+  Tabs Block
+*/
+.tabs-wrapper{
+  .tabs__item{
+    @apply hidden transition-all duration-300;
+
+    &.is-active{
+      @apply block;
+    }
+  }
+}
+
+.s-block--tabs-produtcs{
+  .tabs{
+    @apply text-center pb-6 sm:pb-10 px-5 -mx-2.5 sm:-mx-5 lg:mx-0 rtl:space-x-reverse space-x-1 md:space-x-4 whitespace-nowrap overflow-x-auto;
+  }
+
+  .tab-trigger{
+    @apply text-gray-800;
+    &.is-active button{
+      @apply text-primary-reverse bg-primary-dark border-primary-dark;
+    }
+  }
+}
+
+.s-block--special-products{
+  .tabs{
+    @apply mb-4 sm:mb-0 rtl:space-x-reverse space-x-2 md:space-x-8 whitespace-nowrap overflow-x-auto;
+
+    &__item{
+      @apply flex-1 gap-2.5 sm:gap-8;
+
+      &.is-active{
+        display: grid;
+      }
+    }
+  }
+
+  .tab-trigger{
+    @apply text-gray-800 font-bold leading-7;
+
+    &.is-active button{
+      @apply text-primary-dark border-primary-dark;
+    }
+  }
+}
+
+.s-block--tabs-produtcs,
+.s-block--special-products {
+  &:not(.tabs-initialized) {
+    .tabs-wrapper > div:not(:first-child) {
+      display: none;
+    }
+  }
+}
+
+/* feature products*/
+.s-block--features-products {
+  &.two-cols {
+    .inner {
+      display: grid;
+      @apply lg:grid-cols-2 gap-5;
+    }
+  }
+}
+
+/* slider with bg block */
+.s-block--slider-with-bg{
+  @apply bg-white pb-8 sm:pb-16 mt-6 sm:mt-16;
+
+  // :is keeps the .s-block mt-6 above (declared later) from winning.
+  &:is(:first-of-type, :where(.s-block:empty:first-of-type) + *) {
+    @apply mt-0;
+  }
+
+  .slider-bg{
+    @apply transition-opacity bg-center bg-contain text-white relative rounded-t-3xl overflow-hidden;
+    height: 220px;
+
+    @screen sm {
+      height: auto;
+      aspect-ratio: 12 / 5;
+      max-height: 311px;
+    }
+
+    &:before{
+      content: '';
+      @apply h-full w-full absolute top-0 left-0;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 45%, #fff 81%);
+    }
+  }
+
+  // container is 10px globally; the design wants the cards' visible edge 16px
+  // from the screen edge (12px here + 4px slide padding)
+  .container{
+    @apply px-3 sm:px-2.5;
+  }
+
+  .s-slider-block{
+    // blockTitle is a space so the display-all link has a row; collapse it
+    // on mobile so the slides start at the 98px overlap. Title-nav stays
+    // `display: none` until `@include web-desktop` in desktop.scss.
+    &__title{
+      @apply mb-0 sm:mb-4 md:mb-8;
+    }
+
+    &__title-right{
+      @apply hidden;
+    }
+
+    &__title-left{
+      @apply w-full flex justify-between;
+    }
+
+    &__display-all{
+      @apply block btn btn--outline light btn--rounded-full;
+      @apply grow-0 bg-transparent text-white #{!important};
+    }
+  }
+}
+
+/*
+  Main Links Block
+*/
+.slide--cat-entry {
+  @apply bg-white rounded-md w-24 pb-1 text-center flex flex-col items-center justify-center gap-1 transition duration-500 hover:shadow-default hover:text-gray-500 border border-gray-100;
+
+  i {
+    @apply inline-block text-primary text-icon-lg;
+  }
+
+  h2 {
+    @apply font-semibold text-xs text-ink;
+  }
+}
+
+/*
+  offers slider
+*/
+.slide--offer-entry {
+  @apply bg-white rounded-md h-36 text-center flex flex-col items-center justify-between text-gray-600 transition duration-500 hover:shadow-default border border-gray-200;
+}
+
+
+.s-block {
+  // Figma: 24px between home blocks on mobile, whatever the block order.
+  @apply mt-6 sm:mt-16;
+
+  // A block with nothing to show (no items, all out of stock, failed load) renders
+  // nothing; drop its reserved height and spacing.
+  &:empty {
+    display: none;
+  }
+
+  // Figma: 16px page-bottom padding above the bottom nav (home renders blocks straight into <main>)
+  // (:last-of-type — an empty <salla-hook> follows the blocks)
+  #main-content &:last-of-type,
+  #main-content &:is(:has(+ .s-block:empty:last-of-type)) {
+    @apply pb-4;
+  }
+
+  &.skeleton-block-hero {
+    min-height: 350px;
+  }
+
+  &.skeleton-block-products {
+    min-height: 450px;
+  }
+
+  &--slider-products-with-header {
+    min-height: 320px; // holds the block while its wrapper stays hidden (loading)
+
+    // Loaded: the cards set the height, with or without the delivery promise row.
+    &:has(> .slider-products-with-header:not([hidden])) {
+      min-height: 0;
+    }
+  }
+
+  // Off-screen blocks that haven't mounted yet skip layout and paint, so their
+  // skeletons don't pulse unseen. The inline min-height (dropped on mount) keeps
+  // the reserved size while they're skipped. Descendant, not child: the native
+  // app wraps the blocks in PullToRefresh and RouteGestureTransition divs.
+  #main-content &:nth-of-type(n + 4)[style*='min-height'] {
+    content-visibility: auto;
+  }
+
+  // A collapsed (:empty) block is still a sibling. The adjacency rules below skip
+  // it (one at most) and never start from it; :where keeps their specificity.
+  &--full-bg{
+    &:first-of-type,
+    :where(.s-block:empty:first-of-type) + &{
+      @apply mt-0;
+    }
+
+    &:where(:not(:empty)) + footer,
+    &:where(:not(:empty)) + :where(.s-block:empty) + footer,
+    &:where(:not(:empty)) + .s-block--full-bg,
+    &:where(:not(:empty)) + :where(.s-block:empty) + .s-block--full-bg{
+      @apply mt-0;
+    }
+
+    &:where(:not(:empty)) + .merge-with-top-component,
+    &:where(:not(:empty)) + :where(.s-block:empty) + .merge-with-top-component{
+      @apply -mt-28 md:-mt-32 z-1;
+
+      .s-slider-block__title {
+        color: #fff !important;
+        @apply text-center sm:text-start sm:mb-4;
+      }
+    }
+
+    &:where(:not(:empty)) + .merged-has-no-title,
+    &:where(:not(:empty)) + :where(.s-block:empty) + .merged-has-no-title{
+      @apply -mt-16 md:-mt-[74px];
+
+      .s-slider-block__title {
+        @apply sm:mb-0;
+      }
+    }
+  }
+
+  &--categories{
+    @apply relative overflow-hidden;
+
+    &__title{
+      @apply font-bold text-base sm:text-lg sm:mb-4 relative z-1 min-h-[28px];
+    }
+  }
+
+  &--features{
+    &__item{
+      @apply cursor-pointer bg-white transition-shadow duration-500 hover:shadow-default rounded-md flex-grow flex flex-col items-center px-4 py-8 md:px-8 text-center;
+
+      &:first-child{
+        @apply col-span-2 md:col-span-1;
+      }
+
+      .feature-icon{
+        @apply mb-3 bg-primary w-16 h-16 rounded-full flex items-center justify-center overflow-hidden;
+
+        i{
+          @apply text-primary-reverse text-3xl;
+        }
+      }
+
+      h2{
+        @apply font-bold text-sm text-gray-800 mb-1;
+      }
+
+      p{
+        @apply text-sm text-gray-500;
+      }
+
+      &:hover {
+        .feature-icon i {
+          animation: toRightFromLeft 0.3s forwards;
+        }
+      }
+    }
+  }
+}
+
+// repeated block with narrow top spacing
+.s-block--features:where(:not(:empty)) + .s-block--features,
+.s-block--features:where(:not(:empty)) + :where(.s-block:empty) + .s-block--features,
+.s-block--fixed-banner:where(:not(:empty)) + .s-block--fixed-banner,
+.s-block--fixed-banner:where(:not(:empty)) + :where(.s-block:empty) + .s-block--fixed-banner,
+.s-block--banners:where(:not(:empty)) + .s-block--banners,
+.s-block--banners:where(:not(:empty)) + :where(.s-block:empty) + .s-block--banners {
+  margin-top: 2em;
+}
+
+.s-block--tabs-produtcs:where(:not(:empty)) + .s-block--tabs-produtcs,
+.s-block--tabs-produtcs:where(:not(:empty)) + :where(.s-block:empty) + .s-block--tabs-produtcs {
+  padding-top: 2em;
+}
+
+/*
+  Fixed Products Grid
+*/
+.s-products-list-wrapper.s-products-list-vertical-cards {
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: 1rem;
+
+  @media (max-width: 767px) {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+
+  &.s-products-list-with-filters {
+    grid-template-columns: repeat(3, minmax(0,1fr));
+  }
+}
+
+/*
+  Component path-based classes
+  Each s-block--{path} extends the original CSS classes it needs.
+  RenderWhenVisible applies s-block s-block--${data.path} as className.
+*/
+%salla-container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 10px;
+  padding-left: 10px;
+  max-width: 1280px;
+}
+
+.s-block--products-slider {
+  @extend %salla-container;
+  @apply overflow-hidden;
+}
+
+.s-block--fixed-products {
+  @extend %salla-container;
+  @apply overflow-hidden;
+}
+
+.s-block--testimonial {
+  @extend .s-block--testimonials;
+  @extend %salla-container;
+  @apply overflow-hidden;
+}
+
+.s-block--store-features {
+  @extend .s-block--features;
+  @extend %salla-container;
+}
+
+.s-block--parallax-background {
+  @extend .s-block--full-bg;
+}
+
+.s-block--square-photos {
+  @extend %salla-container;
+}
+
+.s-block--square-photos:where(:not(:empty)) + .s-block--square-photos,
+.s-block--square-photos:where(:not(:empty)) + :where(.s-block:empty) + .s-block--square-photos {
+  margin-top: 2em;
+}
+
+.s-block--brands {
+  @extend .s-block--full-bg;
+  @apply bg-gray-100 pt-8 sm:pt-12 pb-8 sm:pb-20;
+}
+
+.s-block--enhanced-slider {
+  @extend .s-block--hero-slider;
+  @extend .s-block--full-bg;
+}
+
+.s-block--main-links {
+  @extend .s-block--categories;
+}
+
+.s-block--square-links {
+  @extend .s-block--categories;
+}
+
+.s-block--slider-products-with-header {
+  @extend .s-block--slider-with-bg;
+  @extend .s-block--full-bg;
+}
+
+.s-block--enhanced-square-banners {
+  @extend %salla-container;
+}
+
+.s-block--enhanced-square-banners:where(:not(:empty)) + .s-block--enhanced-square-banners,
+.s-block--enhanced-square-banners:where(:not(:empty)) + :where(.s-block:empty) + .s-block--enhanced-square-banners {
+  margin-top: 2em;
+}
+
+.s-block--promotional-banner {
+  width: 100%;
+  overflow: hidden;
+
+  &.merge-with-top-component {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+.promotional-banner {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #e7fffa;
+
+  &__inner,
+  &__slider,
+  &__slide {
+    width: 100%;
+  }
+
+  // Pre-hydration placeholder is a div (not salla-slider); keep only the first
+  // message visible so padded loop copies don't stack and shift the layout.
+  &__slider:not(.hydrated) [slot='items'] > :not(:first-child) {
+    display: none;
+  }
+
+  &__message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 1.5rem;
+    gap: 0.375rem;
+    color: #161515;
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: normal;
+    text-align: center;
+  }
+
+  &__icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex: 0 0 1.5rem;
+    object-fit: contain;
+  }
+
+  &__highlight {
+    color: var(--promotional-banner-highlight, #ff0000);
+  }
+}
